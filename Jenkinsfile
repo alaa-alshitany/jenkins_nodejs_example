@@ -2,29 +2,19 @@ pipeline {
     agent { 
         label 'private-slave'
     }
-
+  
+    environment {
+        RDS_HOSTNAME   = credentials('RDS_HOSTNAME')
+        RDS_USERNAME   = credentials('RDS_USERNAME')
+        RDS_PASSWORD   = credentials('RDS_PASSWORD')
+        RDS_PORT       = credentials('RDS_PORT')
+        REDIS_HOSTNAME = credentials('REDIS_HOSTNAME')
+        REDIS_PORT     = credentials('REDIS_PORT')
+    }
     stages {
         stage('Checkout Code') {
             steps {
                 git branch: 'rds_redis', url: 'https://github.com/alaa-alshitany/jenkins_nodejs_example'
-            }
-        }
-
-        stage('Fetch Secrets') {
-            steps {
-                script {
-                    def secrets = sh(script: '''
-                        aws secretsmanager get-secret-value --secret-id rds_credentials --query SecretString --output text
-                    ''', returnStdout: true).trim()
-
-                    def json = readJSON text: secrets
-
-                    env.RDS_HOSTNAME = json.host
-                    env.RDS_USERNAME = json.username
-                    env.RDS_PASSWORD = json.password
-                    env.RDS_PORT = json.port
-                    env.DB_NAME = json.db_name
-                }
             }
         }
 
