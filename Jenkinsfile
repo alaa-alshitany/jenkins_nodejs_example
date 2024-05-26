@@ -45,7 +45,7 @@ pipeline {
 
     post {
         success {
-            echo 'Deploymrent completed successfully'
+            echo 'Deployment completed successfully'
         }
         failure {
             echo 'Pipeline failed'
