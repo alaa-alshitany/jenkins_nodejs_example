@@ -4,13 +4,12 @@ pipeline {
     }
   
     environment {
-        RDS_HOSTNAME   = sh(script: 'aws ssm get-parameter --name RDS_HOSTNAME --query Parameter.Value --output text', returnStdout: true).trim()
-        RDS_USERNAME   = sh(script: 'aws ssm get-parameter --name RDS_USERNAME --query Parameter.Value --output text', returnStdout: true).trim()
-        RDS_PASSWORD   = sh(script: 'aws ssm get-parameter --with-decryption --name RDS_PASSWORD --query Parameter.Value --output text', returnStdout: true).trim()
-        RDS_PORT       = sh(script: 'aws ssm get-parameter --name RDS_PORT --query Parameter.Value --output text', returnStdout: true).trim()
-        REDIS_HOSTNAME = sh(script: 'aws elasticache describe-cache-clusters --cache-cluster-id cluster --show-cache-node-info | jq -r \'.CacheClusters[0].CacheNodes[0].Endpoint.Address\'', returnStdout: true).trim()
-        REDIS_PORT     = sh(script: 'aws elasticache describe-cache-clusters --cache-cluster-id cluster --show-cache-node-info | jq -r \'.CacheClusters[0].CacheNodes[0].Endpoint.Port\'', returnStdout: true).trim()
-    
+        RDS_HOSTNAME   = credentials('RDS_HOSTNAME')
+        RDS_USERNAME   = credentials('RDS_USERNAME')
+        RDS_PASSWORD   = credentials('RDS_PASSWORD')
+        RDS_PORT       = credentials('RDS_PORT')
+        REDIS_HOSTNAME = credentials('REDIS_HOSTNAME')
+        REDIS_PORT     = credentials('REDIS_PORT')
     }
     stages {
         stage('Checkout Code') {
