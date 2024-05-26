@@ -35,7 +35,8 @@ pipeline {
                         -e RDS_USERNAME \
                         -e RDS_PASSWORD \
                         -e RDS_PORT \
-                        -e DB_NAME \
+                        -e REDIS_HOSTNAME \
+                        -e REDIS_PORT \
                         --name nodejsapp_container nodejsapp
                     '''
                 }
